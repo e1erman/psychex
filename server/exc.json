@@ -5,8 +5,44 @@
             "os": ["android"],
             "versions": [
                 {
-                    "filename": "DeltaX-2.736.1408-02.apk",
-                    "url": "https://delta.filenetwork.vip/file/DeltaX-2.736.1408-02.apk"
+                    "filename": "Delta-2.736.1408-02.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.736.1408-02.apk"
+                },
+                {
+                    "filename": "Delta-2.736.1408.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.736.1408.apk"
+                },
+                {
+                    "filename": "Delta-2.735.1138.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.735.1138.apk"
+                },
+                {
+                    "filename": "Delta-2.733.988.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.733.988.apk"
+                },
+                {
+                    "filename": "Delta-2.731.944-03.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.731.944-03.apk"
+                },
+                {
+                    "filename": "Delta-2.731.944-02.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.731.944-02.apk"
+                },
+                {
+                    "filename": "Delta-2.731.944.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.731.944.apk"
+                },
+                {
+                    "filename": "Delta-2.729.840.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.729.840.apk"
+                },
+                {
+                    "filename": "Delta-2.727.1199-02.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.727.1199-02.apk"
+                },
+                {
+                    "filename": "Delta-2.727.1199.apk",
+                    "url": "https://delta.filenetwork.vip/file/Delta-2.727.1199.apk"
                 }
             ]
         }
