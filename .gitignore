@@ -1,0 +1,22 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.log
+
+# Rust build artifacts
+psychex-ui/src-tauri/target/
+psychex-setup/src-tauri/target/
+client/src-tauri/target/
+
+# Tauri generated
+psychex-ui/src-tauri/gen/
+psychex-setup/src-tauri/gen/
+client/src-tauri/gen/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+.claude/

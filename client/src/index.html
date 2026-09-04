@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100% !important; min-height: 100vh; overflow: hidden; background: #0D0D0D; font-family: 'IBM Plex Mono', monospace; color: #fff; }
+    obsidian-widget { width: 100vw !important; height: 100vh !important; display: block !important; }
+    obsidian-widget > * { width: 100vw !important; height: 100vh !important; }
+
+    /* Loading screen */
+    #loading {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #0D0D0D;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; transition: opacity 0.3s ease;
+      -webkit-app-region: drag;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+
+    /* Centered card */
+    #loading-card {
+      background: #0D0D0D;
+      border: 2px solid #202020; border-radius: 2px;
+      overflow: hidden; display: flex;
+      -webkit-app-region: no-drag;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+      text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+    }
+    #loading-left { width: 460px; flex-shrink: 0; display: flex; flex-direction: column; }
+
+    /* Header */
+    #loading-header {
+      height: 40px; background: #0D0D0D; border-bottom: 2px solid #202020;
+      display: flex; align-items: center;
+      padding: 0 10px; flex-shrink: 0; user-select: none;
+    }
+    #loading-header-left { display: flex; align-items: center; gap: 7px; }
+    #loading-header-icon { color: #7d55ff; display: flex; align-items: center; }
+    #loading-title { font-size: 12px; font-weight: 600; color: #fff; }
+
+    /* Main */
+    #loading-main {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      gap: 25px; padding: 45px 12px 42px;
+    }
+    #loading-bottom {
+      display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0;
+    }
+    #loading-icon {
+      color: #7d55ff; animation: spin 1s linear infinite;
+      display: flex; align-items: center; justify-content: center;
+    }
+#loading-icon.idle { animation: none; color: rgba(125,85,255,0.4); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-message { font-size: 13px; font-weight: 600; color: #fff; text-align: center; }
+    #progress-wrap.hidden { opacity: 0; pointer-events: none; }
+    #loading-description { font-size: 11px; color: #fff; text-align: center; margin-top: 12px; line-height: 1.5; }
+    #progress-wrap { width: calc(100% - 108px); display: flex; flex-direction: column; gap: 5px; margin-top: 12px; }
+    #progress-bar { width: 100%; height: 20px; background: #202020; border-radius: 3px; overflow: hidden; position: relative; }
+    #progress-fill {
+      height: 100%; background: #7d55ff; width: 0%;
+      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    #step-counter {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: #fff; pointer-events: none;
+    }
+
+    /* Log */
+    #loading-log {
+      width: 0; min-width: 0; overflow: hidden;
+      border-left: 0px solid #202020;
+      background: #0D0D0D;
+      position: relative; flex-shrink: 0; align-self: stretch;
+      transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    #loading-log.expanded {
+      width: 230px; border-left-width: 2px;
+    }
+    #loading-log-content {
+      position: absolute; top: 0; left: 0; width: 230px; bottom: 0;
+      overflow-y: auto; overflow-x: hidden;
+      padding: 8px; display: flex; flex-direction: column;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px; line-height: 1.7;
+    }
+    .log-line { color: #fff; word-break: break-all; }
+    .log-line.ok { color: #a688ff; }
+    .log-line.err { color: #ff4444; }
+    .log-line.dim { color: rgba(255,255,255,0.4); }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.mspaint.cc/widgets/obsidian.js"></script>
+</head>
+<body>
+  <div id="loading">
+  <div id="loading-card">
+    <div id="loading-left">
+      <div id="loading-header">
+        <div id="loading-header-left">
+          <div id="loading-header-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <span id="loading-title">psychex</span>
+        </div>
+      </div>
+      <div id="loading-main">
+        <div id="loading-icon">
+          <svg style="width:62px;height:62px;flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        </div>
+        <div id="loading-bottom">
+          <div id="loading-message">psychex</div>
+          <div id="loading-description">Initializing...</div>
+          <div id="progress-wrap">
+            <div id="progress-bar">
+              <div id="progress-fill"></div>
+              <div id="step-counter">0 / 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="loading-log"><div id="loading-log-content"></div></div>
+  </div>
+  </div>
+<script src="main.js"></script>
+</body>
+</html>

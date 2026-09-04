@@ -1,0 +1,10 @@
+{
+    "exc": [
+        {
+            "name": "Delta",
+            "api": "https://delta.filenetwork.vip/get_files.php",
+            "api_latest_field": "latest_apk",
+            "download_base": "https://delta.filenetwork.vip/file/"
+        }
+    ]
+}
