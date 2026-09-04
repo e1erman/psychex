@@ -4,11 +4,16 @@ use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Manager};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ExcVersion {
+    pub filename: String,
+    pub url: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ExcEntry {
     pub name: String,
-    pub api: String,
-    pub api_latest_field: String,
-    pub download_base: String,
+    pub os: Vec<String>,
+    pub versions: Vec<ExcVersion>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -39,9 +44,13 @@ fn get_exc_list(app: AppHandle) -> Result<Vec<ExcEntry>, String> {
         let default_config = serde_json::json!({
             "exc": [{
                 "name": "Delta",
-                "api": "https://delta.filenetwork.vip/get_files.php",
-                "api_latest_field": "latest_apk",
-                "download_base": "https://delta.filenetwork.vip/file/"
+                "os": ["android"],
+                "versions": [
+                    {
+                        "filename": "DeltaX-2.736.1408-02.apk",
+                        "url": "https://delta.filenetwork.vip/file/DeltaX-2.736.1408-02.apk"
+                    }
+                ]
             }]
         });
         fs::write(&path, serde_json::to_string_pretty(&default_config).unwrap())
@@ -56,31 +65,6 @@ fn get_exc_list(app: AppHandle) -> Result<Vec<ExcEntry>, String> {
     }
 
     Ok(config.exc)
-}
-
-#[tauri::command]
-async fn fetch_latest_version(api_url: String, field: String) -> Result<Option<String>, String> {
-    let client = reqwest::Client::builder()
-        .timeout(std::time::Duration::from_secs(10))
-        .build()
-        .map_err(|e| e.to_string())?;
-
-    let response = client
-        .get(&api_url)
-        .send()
-        .await
-        .map_err(|e| e.to_string())?;
-
-    let json: serde_json::Value = response.json().await.map_err(|e| e.to_string())?;
-
-    if let Some(files) = json.get(&field).and_then(|v| v.as_array()) {
-        if let Some(first) = files.first() {
-            if let Some(name) = first.get("name").and_then(|v| v.as_str()) {
-                return Ok(Some(name.to_string()));
-            }
-        }
-    }
-    Ok(None)
 }
 
 #[tauri::command]
@@ -154,7 +138,6 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             get_exc_list,
-            fetch_latest_version,
             get_installed_apk,
             open_download_in_browser,
             check_and_move_download,

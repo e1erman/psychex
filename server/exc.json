@@ -2,9 +2,13 @@
     "exc": [
         {
             "name": "Delta",
-            "api": "https://delta.filenetwork.vip/get_files.php",
-            "api_latest_field": "latest_apk",
-            "download_base": "https://delta.filenetwork.vip/file/"
+            "os": ["android"],
+            "versions": [
+                {
+                    "filename": "DeltaX-2.736.1408-02.apk",
+                    "url": "https://delta.filenetwork.vip/file/DeltaX-2.736.1408-02.apk"
+                }
+            ]
         }
     ]
 }

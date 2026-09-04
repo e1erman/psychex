@@ -266,11 +266,12 @@ function setupWindowControls(widget) {
 
 async function startDownload(excName) {
     const exc = excList.find(e => e.name === excName);
-    const filename = versions[excName];
-    if (!filename || !exc) return;
+    const latest = exc?.versions?.[0];
+    if (!latest || !exc) return;
+    const filename = latest.filename;
 
     try {
-        await invoke('open_download_in_browser', { url: exc.download_base + filename });
+        await invoke('open_download_in_browser', { url: latest.url });
     } catch (e) {
         console.error('Failed to open browser:', e);
         return;
@@ -308,20 +309,17 @@ async function init() {
     }
 
     await new Promise(r => setTimeout(r, 500));
-    loadingStep(1, 'Checking latest versions...', 'Fetching from official APIs');
+    loadingStep(1, 'Checking latest versions...', 'Reading from executor list');
     logLine('Checking latest versions...');
-    await Promise.all(excList.map(async (exc) => {
-        try {
-            versions[exc.name] = await invoke('fetch_latest_version', {
-                apiUrl: exc.api,
-                field: exc.api_latest_field
-            });
-            logLine('✓ ' + exc.name + ': ' + versions[exc.name], 'ok');
-        } catch {
-            versions[exc.name] = null;
-            logLine('✗ ' + exc.name + ': unavailable', 'err');
+    excList.forEach(exc => {
+        const latest = exc.versions?.[0];
+        versions[exc.name] = latest ? latest.filename : null;
+        if (latest) {
+            logLine('✓ ' + exc.name + ': ' + latest.filename, 'ok');
+        } else {
+            logLine('✗ ' + exc.name + ': no versions listed', 'err');
         }
-    }));
+    });
 
     await new Promise(r => setTimeout(r, 500));
     loadingStep(2, 'Checking installed executors...', 'Scanning local files');
