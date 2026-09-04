@@ -1,3 +1,7 @@
+# ⚠️ DISCLAIMER: This project is Vibe Code — entirely AI generated.
+
+---
+
 # Psychex
 
 **Psychex** is a desktop application for Windows that lets you download, manage and run Roblox executors (EXC) — both for Windows and for Android (via VM).
